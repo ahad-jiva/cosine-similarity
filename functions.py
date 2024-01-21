@@ -3,36 +3,29 @@ import numpy as np
 
 
 def get_words(file1, file2):
-    global first_text_words, second_text_words
-    try:
-        input1 = open(file1, 'r')
-        first_text = input1.readlines()
-        input1.close()
-        first_text_words = {}
-        for line in first_text:
-            line.replace('\n', '')
-            removed_punc_line = line.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
-            lowercase_line = removed_punc_line.lower()
-            line_words = lowercase_line.split()
-            for word in line_words:
-                first_text_words[word] = None
-    except FileNotFoundError:
-        print("File 1 was not found.")
+    input1 = open(f'text files/{file1}', 'r')
+    first_text = input1.readlines()
+    input1.close()
+    first_text_words = {}
+    for line in first_text:
+        line.replace('\n', '')
+        removed_punc_line = line.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+        lowercase_line = removed_punc_line.lower()
+        line_words = lowercase_line.split()
+        for word in line_words:
+            first_text_words[word] = None
 
-    try:
-        input2 = open(file2, 'r')
-        second_text = input2.readlines()
-        input2.close()
-        second_text_words = {}
-        for line in second_text:
-            line.replace('\n', '')
-            removed_punc_line = line.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
-            lowercase_line = removed_punc_line.lower()
-            line_words = lowercase_line.split()
-            for word in line_words:
-                second_text_words[word] = None
-    except FileNotFoundError:
-        print("File 2 was not found.")
+    input2 = open(f'text files/{file2}', 'r')
+    second_text = input2.readlines()
+    input2.close()
+    second_text_words = {}
+    for line in second_text:
+        line.replace('\n', '')
+        removed_punc_line = line.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+        lowercase_line = removed_punc_line.lower()
+        line_words = lowercase_line.split()
+        for word in line_words:
+            second_text_words[word] = None
 
     total_words = first_text_words | second_text_words
     total_list = list(total_words.keys())
