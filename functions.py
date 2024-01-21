@@ -33,6 +33,14 @@ def get_words(file1, file2):
     return [first_text_words, second_text_words, total_list]
 
 
+def file_word_count(filename):
+    text = open(f'text files/{filename}', 'r')
+    words = 0
+    for line in text:
+        words += len(line.split())
+    return words
+
+
 def vectorize(first_words, second_words, total):
     file1_bools = [0] * len(total)
     file2_bools = [0] * len(total)
@@ -60,8 +68,22 @@ def cos_similarity(vector1, vector2):
 def display_results():
     first_file = input("Filename 1: ")
     second_file = input("Filename 2: ")
+    word_match_weight = float(input("Weight of text content similarity (enter a number between 0-100; 65 recommended): "))
+    word_count_weight = float(input("Weight of text length similarity (enter a number between 0-100; 35 recommended): "))
+    if word_match_weight + word_count_weight != 100:
+        return "Invalid weight values (make sure weights sum to 100)"
     dicts = get_words(first_file, second_file)
     vectors = vectorize(dicts[0], dicts[1], dicts[2])
     similarity = cos_similarity(vectors[0], vectors[1])
-    percent_sim = "{:.3f}".format(similarity * 100)
-    return f'Your text files are {percent_sim}% similar.'
+    word_count1 = file_word_count(first_file)
+    word_count2 = file_word_count(second_file)
+    word_count_diff = abs((word_count1 - word_count2) / ((word_count1 + word_count2) / 2))
+    weighted_similarity = similarity * (int(word_match_weight) / 100)
+    weighted_count = word_count_diff * (int(word_count_weight) / 100)
+    weighted_percent_sim = "{:.3f}".format((weighted_similarity + weighted_count) * 100)
+    no_length_percent_sim = "{:.3f}".format(similarity * 100)
+    no_match_percent_sim = "{:.3f}".format(word_count_diff * 100)
+    return f'Your text files are {weighted_percent_sim}% similar with a {word_match_weight}% weight on text content ' \
+           f'similarity and a {word_count_weight}% weight on text length similarity.\nWithout accounting for text ' \
+           f'length similarity, your text files are {no_length_percent_sim}% similar.\nWithout accounting for text ' \
+           f'content similarity, your text files are {no_match_percent_sim}% similar.'
