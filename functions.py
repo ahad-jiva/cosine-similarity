@@ -77,7 +77,7 @@ def display_results():
     similarity = cos_similarity(vectors[0], vectors[1])
     word_count1 = file_word_count(first_file)
     word_count2 = file_word_count(second_file)
-    word_count_diff = abs((word_count1 - word_count2) / ((word_count1 + word_count2) / 2))
+    word_count_diff = 1 - abs((word_count1 - word_count2) / (word_count1 + word_count2))
     weighted_similarity = similarity * (int(word_match_weight) / 100)
     weighted_count = word_count_diff * (int(word_count_weight) / 100)
     weighted_percent_sim = "{:.3f}".format((weighted_similarity + weighted_count) * 100)
